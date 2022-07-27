@@ -1,4 +1,4 @@
-# Baidu Spider
+# Scrapy Basic Demo
 
 项目创建流程：
 
