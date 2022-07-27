@@ -21,6 +21,7 @@ class DsSpider(scrapy.Spider):
 
     # 解析详情页逻辑
     def parse_detail(self, response):
+        id = response.url.strip('/').split('/')[-1]
         title = response.xpath('//div[@class="book-title"]/h1/text()').get()
         image_url = response.xpath('//div[@class="book-pic"]/div[@class="pic"]/img/@src').get()
         price = response.xpath('//p[@class="price"]/span[@class="num"]/text()').get('0')
@@ -29,6 +30,7 @@ class DsSpider(scrapy.Spider):
         description = response.xpath("//div[@class='book-summary'][1]//div[@class='text txtsummary']/text()").get('')
 
         yield dict(
+            id=id,
             title=title,
             image_url=image_url,
             price=price,
