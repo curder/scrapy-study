@@ -27,7 +27,7 @@ export default defineConfig({
 
 function nav() {
     return [
-        {text: 'Guide', link: '/guide/basic', activeMatch: '/guide/'},
+        {text: 'Guide', link: '/guide/getting-started', activeMatch: '/guide/'},
     ];
 }
 
@@ -39,6 +39,7 @@ function sidebarGuide() {
             collapsed: false,
             items: [
                 {text: "概念和工作流程", link: "/guide/basic"},
+                {text: "入门使用", link: "/guide/getting-started"},
             ]
         },
     ];
