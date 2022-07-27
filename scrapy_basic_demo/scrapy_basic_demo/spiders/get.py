@@ -11,4 +11,3 @@ class GetSpider(scrapy.Spider):
         yield {
             "title": title.get(),  # Selector对象使用 `get()` 或者 `getall()` 获取内容
         }
-
