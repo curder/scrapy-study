@@ -4,7 +4,14 @@
 
 ```bash
 pip3 install Scrapy # 安装 Scrapy
-scrapy startproject baidu_spider # 创建项目
+scrapy startproject scrapy_basic_demo # 创建项目
 
-scrapy genspider baidu baidu.com  # 创建蜘蛛文件
+scrapy genspider get baidu.com  # 创建蜘蛛文件
+```
+
+
+启动爬虫
+
+```bash
+scrapy crawl get
 ```
