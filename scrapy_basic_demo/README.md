@@ -16,4 +16,6 @@ scrapy genspider get baidu.com  # 创建蜘蛛文件
 scrapy crawl get  # 获取响应中单个内容，获取响应中input元素的值
 
 scrapy crawl getall  # 获取响应中多个内容，获取响应中书本名称列表
+
+scrapy crawl post  # 发送POST请求获取JSON响应
 ```
