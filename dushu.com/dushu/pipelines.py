@@ -6,8 +6,23 @@
 
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
+import json
 
 
 class DushuPipeline:
+    # 周期函数，当蜘蛛开始工作时触发
+    def __init__(self):
+        self.file = None
+
+    def open_spider(self, spider):
+        self.file = open('dushu.json', 'a', encoding='utf-8')
+
+    # 周期函数，当蜘蛛结束工作时触发
+    def colse_spider(self):
+        self.file.close()
+
     def process_item(self, item, spider):
-        return item
+        print('PIPLINE: ', item)
+        line = json.dumps(item, ensure_ascii=False) + "\n"
+        self.file.write(line)
+        return item  # 返回给下一个管道使用
