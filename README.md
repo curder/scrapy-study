@@ -1,4 +1,4 @@
-# Scrapy Demo
+# Scrapy爬虫框架
 
 [![GitHub Pages](https://github.com/curder/scrapy-demo/actions/workflows/build-docs.yml/badge.svg?branch=master)](https://curder.github.io/scrapy-demo)
 
