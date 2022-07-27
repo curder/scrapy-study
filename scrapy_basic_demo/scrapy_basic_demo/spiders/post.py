@@ -11,4 +11,4 @@ class PostSpider(scrapy.Spider):
             yield scrapy.FormRequest(url=url, formdata={'kw': 'baby'}, callback=self.parse)
 
     def parse(self, response):
-        print(response.json())  # 获取JSON响应
+        yield response.json()  # 获取JSON响应

@@ -10,3 +10,8 @@ class ScrapyBasicDemoItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
     pass
+
+
+class DushuSpiderItem(scrapy.Item):
+    title = scrapy.Field()
+    author = scrapy.Field()
