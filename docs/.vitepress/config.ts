@@ -2,12 +2,13 @@ import {defineConfig} from 'vitepress'
 
 export default defineConfig({
     lang: "zh-CN",
+    title: "Scrapy",
     base: "/scrapy-demo/",
     description: "Scrapy 学习",
     lastUpdated: true,
     themeConfig: {
-        logo: "https://docs.python.org/zh-cn/3/_static/py.svg",
-        siteTitle: "Scrapy",
+        logo: "https://scrapy.org/img/scrapylogo.png",
+        siteTitle: "",
         outlineTitle: "章节导航",
         lastUpdatedText: "最后更新时间",
         editLink: {
