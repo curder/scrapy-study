@@ -6,6 +6,7 @@
 #     https://docs.scrapy.org/en/latest/topics/settings.html
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
+import logging
 
 BOT_NAME = 'scrapy_basic_demo'
 
@@ -86,3 +87,7 @@ ITEM_PIPELINES = {
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+# 设置日志级别，从高到底依次为：CRITICAL、ERROR、WARNING、INFO、DEBUG，默认为 DEBUG
+LOG_LEVEL = logging.DEBUG
+LOG_FILE = 'history.log'  # 设置日志文件
