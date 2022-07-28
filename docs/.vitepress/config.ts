@@ -44,6 +44,7 @@ function sidebarGuide() {
                 {text: "构造分页请求", link: "/guide/construct-paging-request"},
                 {text: "模拟登录", link: "/guide/simulate-login"},
                 {text: "管道 Pipelines", link: "/guide/pipelines"},
+                {text: "链接提取器", link: "/guide/link-extractors"},
             ]
         },
     ];

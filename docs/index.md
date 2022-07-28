@@ -6,3 +6,4 @@
 - [构造分页请求](./guide/construct-paging-request.md)
 - [模拟登录](./guide/simulate-login.md)
 - [管道 Pipelines](./guide/pipelines.md)
+- [链接提取器](./guide/link-extractors.md)
