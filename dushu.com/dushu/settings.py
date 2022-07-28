@@ -63,7 +63,8 @@ ROBOTSTXT_OBEY = False
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    'dushu.pipelines.DushuPipeline': 300,
+    'dushu.pipelines.DsPipeline': 300,
+    'dushu.pipelines.Ds2Pipeline': 301,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

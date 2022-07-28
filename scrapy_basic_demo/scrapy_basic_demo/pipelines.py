@@ -16,14 +16,17 @@ class ScrapyBasicDemoPipeline:
         self.file = None
 
     def open_spider(self, spider):
-        self.file = open('dushu.json', 'a', encoding='utf-8')
+        if spider.name == 'getall':
+            self.file = open('getall.json', 'a', encoding='utf-8')
 
     # 周期函数，当蜘蛛结束工作时触发
-    def colse_spider(self):
-        self.file.close()
+    def colse_spider(self, spider):
+        if spider.name == 'getall':
+            self.file.close()
 
     def process_item(self, item, spider):
         print('PIPLINE: ', item)
-        line = json.dumps(ItemAdapter(item).asdict(), ensure_ascii=False) + "\n"
-        self.file.write(line)
+        if spider.name == 'getall':
+            line = json.dumps(ItemAdapter(item).asdict(), ensure_ascii=False) + "\n"
+            self.file.write(line)
         return item  # 返回给下一个管道使用

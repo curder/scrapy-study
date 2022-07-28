@@ -5,3 +5,4 @@
 - [数据建模](./guide/data-modeling.md)
 - [构造分页请求](./guide/construct-paging-request.md)
 - [模拟登录](./guide/simulate-login.md)
+- [管道 Pipelines](./guide/pipelines.md)
