@@ -7,3 +7,4 @@
 - [模拟登录](./guide/simulate-login.md)
 - [管道 Pipelines](./guide/pipelines.md)
 - [链接提取器](./guide/link-extractors.md)
+- [中间件 Middlewares](./guide/middlewares.md)

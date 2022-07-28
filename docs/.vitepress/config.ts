@@ -45,6 +45,7 @@ function sidebarGuide() {
                 {text: "模拟登录", link: "/guide/simulate-login"},
                 {text: "管道 Pipelines", link: "/guide/pipelines"},
                 {text: "链接提取器", link: "/guide/link-extractors"},
+                {text: "中间件", link: "/guide/middlewares"},
             ]
         },
     ];
