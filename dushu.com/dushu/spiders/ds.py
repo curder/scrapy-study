@@ -10,14 +10,12 @@ class DsSpider(scrapy.Spider):
         # 提取书本详情链接
         href_list = response.xpath('//div[@class="book-info"]/div/a/@href').getall()
         for href in href_list:
-            detail_url = 'https://www.dushu.com' + href
-            yield scrapy.Request(url=detail_url, callback=self.parse_detail)
+            yield scrapy.Request(url=response.urljoin(href), callback=self.parse_detail)
 
         # 提取分页链接
         page_list = response.xpath('////div[@class="pages"]//a/@href').getall()
         for href in page_list:
-            url = 'https://www.dushu.com' + href
-            yield scrapy.Request(url=url, callback=self.parse)
+            yield scrapy.Request(url=response.urljoin(href), callback=self.parse)
 
     # 解析详情页逻辑
     def parse_detail(self, response):
