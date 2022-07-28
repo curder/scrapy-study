@@ -41,6 +41,7 @@ function sidebarGuide() {
                 {text: "概念和工作流程", link: "/guide/basic"},
                 {text: "入门使用", link: "/guide/getting-started"},
                 {text: "数据建模", link: "/guide/data-modeling"},
+                {text: "构造分页请求", link: "/guide/construct-paging-request"},
             ]
         },
     ];
