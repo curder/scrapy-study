@@ -42,6 +42,7 @@ function sidebarGuide() {
                 {text: "入门使用", link: "/guide/getting-started"},
                 {text: "数据建模", link: "/guide/data-modeling"},
                 {text: "构造分页请求", link: "/guide/construct-paging-request"},
+                {text: "模拟登录", link: "/guide/simulate-login"},
             ]
         },
     ];
