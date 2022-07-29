@@ -8,96 +8,101 @@ from scrapy import signals
 # useful for handling different item types with a single interface
 from itemadapter import is_item, ItemAdapter
 
-
-class AqistudySpiderMiddleware:
-    # Not all methods need to be defined. If a method is not defined,
-    # scrapy acts as if the spider middleware does not modify the
-    # passed objects.
-
-    @classmethod
-    def from_crawler(cls, crawler):
-        # This method is used by Scrapy to create your spiders.
-        s = cls()
-        crawler.signals.connect(s.spider_opened, signal=signals.spider_opened)
-        return s
-
-    def process_spider_input(self, response, spider):
-        # Called for each response that goes through the spider
-        # middleware and into the spider.
-
-        # Should return None or raise an exception.
-        return None
-
-    def process_spider_output(self, response, result, spider):
-        # Called with the results returned from the Spider, after
-        # it has processed the response.
-
-        # Must return an iterable of Request, or item objects.
-        for i in result:
-            yield i
-
-    def process_spider_exception(self, response, exception, spider):
-        # Called when a spider or process_spider_input() method
-        # (from other spider middleware) raises an exception.
-
-        # Should return either None or an iterable of Request or item objects.
-        pass
-
-    def process_start_requests(self, start_requests, spider):
-        # Called with the start requests of the spider, and works
-        # similarly to the process_spider_output() method, except
-        # that it doesn’t have a response associated.
-
-        # Must return only requests (not items).
-        for r in start_requests:
-            yield r
-
-    def spider_opened(self, spider):
-        spider.logger.info('Spider opened: %s' % spider.name)
+import time
+import re
+from lxml import etree
+from selenium.webdriver import Chrome
+from selenium.webdriver import ChromeOptions
+from scrapy.http.response.html import HtmlResponse
 
 
-class AqistudyDownloaderMiddleware:
-    # Not all methods need to be defined. If a method is not defined,
-    # scrapy acts as if the downloader middleware does not modify the
-    # passed objects.
-
-    @classmethod
-    def from_crawler(cls, crawler):
-        # This method is used by Scrapy to create your spiders.
-        s = cls()
-        crawler.signals.connect(s.spider_opened, signal=signals.spider_opened)
-        return s
-
+class AqiDownloadMiddleware(object):
     def process_request(self, request, spider):
-        # Called for each request that goes through the downloader
-        # middleware.
+        if "daydata.php" in request.url:  # 仅过滤日历史数据请求URL
 
-        # Must either:
-        # - return None: continue processing this request
-        # - or return a Response object
-        # - or return a Request object
-        # - or raise IgnoreRequest: process_exception() methods of
-        #   installed downloader middleware will be called
-        return None
+            driver = self.get_selenium_driver()  # 创建浏览器
+            print(request.url)
+            driver.get(request.url)
+            # 延迟 1 秒钟执行
+            time.sleep(1)
 
-    def process_response(self, request, response, spider):
-        # Called with the response returned from the downloader.
+            body = driver.page_source
 
-        # Must either;
-        # - return a Response object
-        # - return a Request object
-        # - or raise IgnoreRequest
-        return response
+            # with open('daydata.html', mode='w', encoding='utf-8') as f:
+            #     f.write(body)
 
-    def process_exception(self, request, exception, spider):
-        # Called when a download handler or a process_request()
-        # (from other downloader middleware) raises an exception.
+            body = self.prune_body(body).decode('utf-8')  # 删除干扰元素
 
-        # Must either:
-        # - return None: continue processing this exception
-        # - return a Response object: stops process_exception() chain
-        # - return a Request object: stops process_exception() chain
-        pass
+            # with open('daydata_2.html', mode='w', encoding='utf-8') as f:
+            #     f.write(body)
 
-    def spider_opened(self, spider):
-        spider.logger.info('Spider opened: %s' % spider.name)
+            driver.close()
+
+            return HtmlResponse(url=request.url, body=body, encoding='utf-8', request=request)
+
+    def prune_body(self, body):
+        dom = etree.HTML(body)
+        # 删除不应该展示数据的table的dom节点
+        for element in dom.xpath("//table[contains(@style, 'position: absolute;')]"):
+            element.getparent().remove(element)
+
+        class_name_lists = re.compile(r'\.([a-z0-9A-Z]+?) \{.*?display: none;.*?\}', re.S).findall(body)
+        # 删除不应该展示的 th 和 td dom节点
+        for class_name in class_name_lists:
+            print(class_name)
+            for element in dom.xpath('//td[contains(@class, "%s")]' % class_name):
+                element.getparent().remove(element)
+            for element in dom.xpath('//th[contains(@class, "%s")]' % class_name):
+                element.getparent().remove(element)
+            for element in dom.xpath('//th[contains(@style, "display:none")]'):
+                element.getparent().remove(element)
+            for element in dom.xpath('//th[contains(@class, "hidden-lg")]'):
+                element.getparent().remove(element)
+            for element in dom.xpath('//td[contains(@class, "hidden-lg")]'):
+                element.getparent().remove(element)
+            for element in dom.xpath('//th[@class="hidden"]'):
+                element.getparent().remove(element)
+            for element in dom.xpath('//td[@class="hidden"]'):
+                element.getparent().remove(element)
+
+        return etree.tostring(dom)
+
+    # def process_response(self, request, response, spider):
+    #
+    #     if "daydata.php" in request.url:  # 仅过滤日历史数据请求URL
+    #         # body_str = str(response.body, response._body_declared_encoding())
+    #         # 删除不应该展示数据的table的dom节点
+    #         for table_selector in response.xpath("//table[contains(@style, 'position: absolute')]"):
+    #             self.remove_selector(table_selector)
+    #
+    #
+    #
+    #         with open('daydata_2.html', mode="w", encoding=response._body_declared_encoding()) as f:
+    #             f.write(str(response.text))
+    #
+    #     return response
+
+    def get_selenium_driver(self):
+        options = ChromeOptions()
+        # 此步骤很重要，设置为开发者模式，防止被各大网站识别出来使用了Selenium
+        options.add_experimental_option('excludeSwitches', ['enable-logging'])  # 禁止打印日志
+        options.add_experimental_option("prefs",
+                                        {"profile.managed_default_content_settings.images": 2})  # 不加载图片,加快访问速度
+        options.add_argument('--incognito')  # 无痕隐身模式
+        options.add_argument("disable-cache")  # 禁用缓存
+        options.add_argument('disable-infobars')  # 禁用“chrome正受到自动测试软件的控制”提示
+        options.add_argument('log-level=3')  # INFO = 0 WARNING = 1 LOG_ERROR = 2 LOG_FATAL = 3 default is 0
+        # options.add_argument("--headless")  # 无头模式--静默运行
+        options.add_argument("--window-size=1920,1080")  # 使用无头模式，需设置初始窗口大小
+        options.add_argument("--test-type")
+        options.add_argument("--ignore-certificate-errors")  # 与上面一条合并使用；忽略 Chrome 浏览器证书错误报警提示
+        options.add_argument("--disable-gpu")  # 禁用GPU加速
+        options.add_argument('--no-sandbox')
+        options.add_argument("--no-first-run")  # 不打开首页
+        options.add_argument("--no-default-browser-check")  # 不检查默认浏览器
+        options.add_argument('--start-maximized')  # 最大化
+        options.add_argument('--disable-gpu')  # 禁用GPU加速
+        options.add_argument(
+            'user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36')
+        options.add_argument("--disable-blink-features=AutomationControlled")
+        return Chrome(options=options)
