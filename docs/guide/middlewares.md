@@ -108,3 +108,46 @@ DOWNLOADER_MIDDLEWARES = {
 }
 # ...
 ```
+
+## 随机代理IP
+
+- 代理添加的位置下载中间件中的 `process_request` 方法中使用 `request.meta` 中增加 `proxy` 字段
+- 获取一个代理 IP，赋值给 `request.meta['proxy']`
+  1. 代理池中随机选择代理 IP 
+  2. 代理ip的webapi发送请求获取一个代理 IP
+
+代码实现：
+
+- 中间件定义 `middlewares.py`
+  ```python
+  import random
+  from dushu.settings import PROXY_LIST  # 从配置中导入UA列表
+  
+  class RandomProxyMiddleware(object):
+      def process_request(self, request, spider):
+          proxy = random.choice(PROXY_LIST)  # 可以在配置文件中读取，也可以从Redis中获取，或者通过API获取
+  
+          request.meta['proxy'] = proxy
+          return None  # 可以不写 return
+      def process_response(self, request, response, spider):
+          if response.status != '200':
+              request.dont_filter = True # 重新发送的请求对象能够再次进入队列
+              return request
+  ```
+
+- 应用中间件和代理IP池 `settings.py`
+  ```python
+  DOWNLOADER_MIDDLEWARES = {
+      'dushu.middlewares.RandomProxyMiddleware': 200,
+      # ...
+  }
+
+  # 代理IP池
+  PROXY_LIST = [
+      'http://IP_ADDRESS:PORT',
+      'http://ANOTHER_IP_ADDRESS:ANOTHER_PORT',
+      # ...
+  ]
+  ```
+
+扩展阅读：[Scrapy 爬免費代理(Proxy)](https://ithelp.ithome.com.tw/articles/10208575) 和 [[Day 24] Scrapy 隨機代理實現](https://ithelp.ithome.com.tw/articles/10208773)

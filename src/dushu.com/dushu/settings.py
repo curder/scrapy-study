@@ -105,6 +105,11 @@ USER_AGENTS_LIST = [
     "Mozilla/5.0 (X11; Linux i686; U;) Gecko/20070322 Kazehakase/0.4.5"
 ]
 DOWNLOADER_MIDDLEWARES = {
+    'dushu.middlewares.RandomProxyMiddleware': 200,
     'dushu.middlewares.UserAgentMiddleware': 543,
     'dushu.middlewares.CheckUA': 555,
 }
+# 代理IP池
+PROXY_LIST = [
+    "http://61.183.234.226:9091"
+]
