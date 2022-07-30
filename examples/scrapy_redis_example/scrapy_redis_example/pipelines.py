@@ -11,6 +11,6 @@ from datetime import datetime
 
 class ScrapyRedisExamplePipeline:
     def process_item(self, item, spider):
-        item["crawled"] = datetime.utcnow()
+        item["crawled"] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         item["spider"] = spider.name
         return item
