@@ -19,7 +19,7 @@ class Ds2Spider(CrawlSpider):
     def parse_item(self, response):
         id = response.url.strip('/').split('/')[-1]
         title = response.xpath('//div[@class="book-title"]/h1/text()').get()
-        image_url = response.xpath('//div[@class="book-pic"]/div[@class="pic"]/img/@src').get()
+        image_url = response.xpath('//div[@class="book-pic"]/div[@class="pic"]/img/@examples').get()
         price = response.xpath('//p[@class="price"]/span[@class="num"]/text()').get('0')
         author = response.xpath('//div[@class="book-details-left"]/table/tbody/tr[1]/td[2]/text()').get('')
         publishing_house = response.xpath('//div[@class="book-details-left"]/table/tbody/tr[2]/td[2]/text()').get()

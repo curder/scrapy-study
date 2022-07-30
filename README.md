@@ -2,15 +2,15 @@
 
 [![GitHub Pages](https://github.com/curder/scrapy-demo/actions/workflows/build-docs.yml/badge.svg?branch=master)](https://curder.github.io/scrapy-demo)
 
-## [基础学习](./src/scrapy_basic_demo/README.md)
+## [基础学习](examples/scrapy_basic_demo/README.md)
 
 项目搭建、创建蜘蛛文件、pipeline管道使用、items使用等。
 
-## [读书网站书本数据爬取](./src/dushu.com/README.md)
+## [读书网站书本数据爬取](examples/dushu.com/README.md)
 
 获取[读书网](https://www.dushu.com/book/1617.html) 中"国学入门"分类下的所有分页图片列表的书本详情信息。
 
-## [PM2.5空气质量日历史数据获取爬虫](./src/aqistudy.cn/README.md)
+## [PM2.5空气质量日历史数据获取爬虫](examples/aqistudy.cn/README.md)
 
 [该站点](https://www.aqistudy.cn/historydata/)目前数据的目标页有一些反扒措施，比如数据使用JS动态加载，JS代码加密，禁用右键，禁用调试器查看源代码，Selenium 不能使用无头浏览器参数。
 
