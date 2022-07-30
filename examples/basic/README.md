@@ -4,7 +4,7 @@
 
 ```bash
 pip3 install Scrapy # 安装 Scrapy
-scrapy startproject basic # 创建项目
+scrapy startproject basic basic_examples # 创建项目
 
 scrapy genspider get baidu.com  # 创建蜘蛛文件
 ```
