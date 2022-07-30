@@ -90,6 +90,8 @@ class AqiDownloadMiddleware(object):
         options.add_argument('--start-maximized')  # 最大化
         options.add_argument('--disable-gpu')  # 禁用GPU加速
         options.add_argument(
-            'user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36')
+            'user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) '
+            'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36'
+        )
         options.add_argument("--disable-blink-features=AutomationControlled")
         return Chrome(options=options)

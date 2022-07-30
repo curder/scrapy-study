@@ -154,4 +154,189 @@ DOWNLOADER_MIDDLEWARES = {
 
 ## 配合 Selenium
 
+### 中间件中使用 Selenium
 
+```python
+import time
+import re
+from lxml import etree
+from selenium.webdriver import Chrome
+from selenium.webdriver import ChromeOptions
+from scrapy.http.response.html import HtmlResponse
+
+
+class AqiDownloadMiddleware(object):
+    def process_request(self, request, spider):
+        if "daydata.php" in request.url:  # 仅过滤日历史数据请求URL
+
+            driver = self.get_selenium_driver()  # 创建浏览器
+            # print(request.url)
+            driver.get(request.url)
+
+            time.sleep(1)  # 延迟 1 秒钟执行
+
+            body = driver.page_source
+
+            # with open('daydata.html', mode='w', encoding='utf-8') as f:
+            #     f.write(body)
+
+            body = self.prune_body(body).decode('utf-8')  # 删除干扰元素
+
+            # with open('daydata_2.html', mode='w', encoding='utf-8') as f:
+            #     f.write(body)
+
+            driver.close()
+
+            return HtmlResponse(url=request.url, body=body, encoding='utf-8', request=request)
+
+    def prune_body(self, body):
+        dom = etree.HTML(body)
+        # 删除不应该展示数据的table的dom节点
+        for element in dom.xpath("//table[contains(@style, 'position: absolute;')]"):
+            element.getparent().remove(element)
+
+        class_name_lists = re.compile(r'\.([a-z0-9A-Z]+?) \{.*?display: none;.*?\}', re.S).findall(body)
+        # 删除不应该展示的 th 和 td dom节点
+        for class_name in class_name_lists:
+            # print(class_name)
+            for element in dom.xpath('//td[contains(@class, "%s")]' % class_name):
+                element.getparent().remove(element)
+            for element in dom.xpath('//th[contains(@class, "%s")]' % class_name):
+                element.getparent().remove(element)
+            for element in dom.xpath('//th[contains(@style, "display:none")]'):
+                element.getparent().remove(element)
+            for element in dom.xpath('//td[contains(@style, "display:none")]'):
+                element.getparent().remove(element)
+            for element in dom.xpath('//th[contains(@class, "hidden-lg")]'):
+                element.getparent().remove(element)
+            for element in dom.xpath('//td[contains(@class, "hidden-lg")]'):
+                element.getparent().remove(element)
+            for element in dom.xpath('//th[@class="hidden"]'):
+                element.getparent().remove(element)
+            for element in dom.xpath('//td[@class="hidden"]'):
+                element.getparent().remove(element)
+
+        return etree.tostring(dom)
+
+    def get_selenium_driver(self):
+        options = ChromeOptions()
+        # 此步骤很重要，设置为开发者模式，防止被各大网站识别出来使用了Selenium
+        options.add_experimental_option('excludeSwitches', ['enable-logging'])  # 禁止打印日志
+        options.add_experimental_option("prefs",
+                                        {"profile.managed_default_content_settings.images": 2})  # 不加载图片,加快访问速度
+        options.add_argument('--incognito')  # 无痕隐身模式
+        options.add_argument("disable-cache")  # 禁用缓存
+        options.add_argument('disable-infobars')  # 禁用“chrome正受到自动测试软件的控制”提示
+        options.add_argument('log-level=3')  # INFO = 0 WARNING = 1 LOG_ERROR = 2 LOG_FATAL = 3 default is 0
+        # options.add_argument("--headless")  # 无头模式--静默运行
+        options.add_argument("--window-size=1920,1080")  # 使用无头模式，需设置初始窗口大小
+        options.add_argument("--test-type")
+        options.add_argument("--ignore-certificate-errors")  # 与上面一条合并使用；忽略 Chrome 浏览器证书错误报警提示
+        options.add_argument("--disable-gpu")  # 禁用GPU加速
+        options.add_argument('--no-sandbox')
+        options.add_argument("--no-first-run")  # 不打开首页
+        options.add_argument("--no-default-browser-check")  # 不检查默认浏览器
+        options.add_argument('--start-maximized')  # 最大化
+        options.add_argument('--disable-gpu')  # 禁用GPU加速
+        options.add_argument(
+            'user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) '
+            'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36'
+        )
+        options.add_argument("--disable-blink-features=AutomationControlled")
+        return Chrome(options=options)
+```
+
+### 爬虫代码 `aqi.py`
+
+```python
+import scrapy
+from lxml import etree
+from xml.etree.ElementTree import tostring
+from ..items import AqiItem
+
+
+class AqiSpider(scrapy.Spider):
+    name = 'aqi'
+    allowed_domains = ['aqistudy.cn']
+    start_urls = ['https://www.aqistudy.cn/historydata/']
+
+    def parse(self, response):
+        city_node_list = response.xpath('//div[@class="all"]/div[@class="bottom"]/ul//li/a')  # 获取城市月份节点
+
+        for city_node in city_node_list[16:17]:  # 获取一个城市
+            url = response.urljoin(city_node.xpath('./@href').get())
+            city_name = city_node.xpath('./text()').get()
+            # print(url, city_name)
+            yield scrapy.Request(url=url, callback=self.parse_month_data, meta={"city_name": city_name})
+
+    # 获取空气质量指数月统计历史数据，分析出日统计历史数据页面地址
+    def parse_month_data(self, response):
+        month_node_list = response.xpath('//ul[@class="unstyled1"]/li/a/@href').getall()  # 获取城市日节点
+        for month_url in month_node_list:  # 获取12个月
+            url = response.urljoin(month_url)
+            yield scrapy.Request(url=url, callback=self.parse_day_data, meta={"city_name": response.meta['city_name']})
+
+    def parse_day_data(self, response):
+        # 分析数据
+        first_table_tr = response.xpath("//table/tbody/tr[position() = 1]"
+                                        "/*[local-name()='td' or local-name()='th']/text()")  # 获取随机数据表头，确定其索引
+        table_tr_list = response.xpath('//table/tbody/tr[position() > 1]')  # 获取所有数据
+
+        need_fields = {
+            'day': "日期",
+            'aqi': "AQI",
+            'quality_level': "质量等级",
+            'pm_2_5': 'PM2.5',
+            'pm_10': 'PM10',
+            'co': 'CO',
+            'so2': 'SO2',
+            'no2': 'NO2',
+            'o3_8h': 'O3_8h'
+        }
+
+        reverse_need_fields = {v: k for k, v in need_fields.items()}  # 反转字典，将key -> value 互换
+
+        # print(first_table_tr.getall())
+
+        need_field_dict = {reverse_need_fields[table_th.get()]: index + 1 for index, table_th in
+                           enumerate(first_table_tr)
+                           if table_th.get() in need_fields.values()}  #
+
+        # print(need_field_dict)
+
+        for table_tr in table_tr_list:
+            # tr = table_tr.get()
+
+            yield AqiItem(
+                city_name=response.meta['city_name'],
+                day=table_tr.xpath('./td[%d]/text()' % need_field_dict['day']).get(),
+                aqi=table_tr.xpath('./td[%d]/text()' % need_field_dict['aqi']).get(),
+                quality_level=table_tr.xpath('./td[%d]//text()' % need_field_dict['quality_level']).get(),
+                pm_2_5=table_tr.xpath('./td[%d]/text()' % need_field_dict['pm_2_5']).get(),
+                pm_10=table_tr.xpath('./td[%d]/text()' % need_field_dict['pm_10']).get(),
+                co=table_tr.xpath('./td[%d]/text()' % need_field_dict['co']).get(),
+                so2=table_tr.xpath('./td[%d]/text()' % need_field_dict['so2']).get(),
+                no2=table_tr.xpath('./td[%d]/text()' % need_field_dict['no2']).get(),
+                o3_8h=table_tr.xpath('./td[%d]/text()' % need_field_dict['o3_8h']).get(),
+            )
+```
+
+### 数据建模 `items.py`
+
+```python
+import scrapy
+
+class AqiItem(scrapy.Item):
+    city_name = scrapy.Field()  # 城市名
+    day = scrapy.Field()  # 日期
+    aqi = scrapy.Field()  # AQI
+    quality_level = scrapy.Field()  # 质量等级
+    pm_2_5 = scrapy.Field()  # PM2.5
+    pm_10 = scrapy.Field()  # PM10
+    co = scrapy.Field()  # CO
+    so2 = scrapy.Field()  # SO2
+    no2 = scrapy.Field()  # NO2
+    o3_8h = scrapy.Field()  # O3_8h
+```
+
+[完整项目参考这里](https://github.com/curder/scrapy-demo/blob/master/examples/aqistudy.cn/README.md)
