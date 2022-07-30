@@ -23,7 +23,7 @@ scrapy crawl ds2  # 使用链接提取器爬虫
 使用下面的命令进入到项目目录
 
 ```bash
-cd scrapy_basic_demo
+cd basic
 ```
 
 创建一个虚拟环境

@@ -4,7 +4,7 @@
 
 ```bash
 pip3 install Scrapy # 安装 Scrapy
-scrapy startproject scrapy_basic_demo # 创建项目
+scrapy startproject basic # 创建项目
 
 scrapy genspider get baidu.com  # 创建蜘蛛文件
 ```
@@ -25,7 +25,7 @@ scrapy crawl post  # 发送POST请求获取JSON响应
 使用下面的命令进入到项目目录
 
 ```bash
-cd scrapy_basic_demo
+cd basic
 ```
 
 创建一个虚拟环境

@@ -2,7 +2,7 @@
 
 [![GitHub Pages](https://github.com/curder/scrapy-demo/actions/workflows/build-docs.yml/badge.svg?branch=master)](https://curder.github.io/scrapy-demo)
 
-## [基础学习](examples/scrapy_basic_demo/README.md)
+## [基础学习](examples/basic/README.md)
 
 项目搭建、创建蜘蛛文件、pipeline管道使用、items使用等。
 

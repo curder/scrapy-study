@@ -1,4 +1,4 @@
-# Scrapy settings for scrapy_basic_demo project
+# Scrapy settings for basic project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -8,14 +8,14 @@
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 import logging
 
-BOT_NAME = 'scrapy_basic_demo'
+BOT_NAME = 'basic'
 
-SPIDER_MODULES = ['scrapy_basic_demo.spiders']
-NEWSPIDER_MODULE = 'scrapy_basic_demo.spiders'
+SPIDER_MODULES = ['basic.spiders']
+NEWSPIDER_MODULE = 'basic.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'scrapy_basic_demo (+http://www.yourdomain.com)'
+#USER_AGENT = 'basic (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
@@ -46,13 +46,13 @@ ROBOTSTXT_OBEY = False
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'scrapy_basic_demo.middlewares.ScrapyBasicDemoSpiderMiddleware': 543,
+#    'basic.middlewares.ScrapyBasicDemoSpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
-#    'scrapy_basic_demo.middlewares.ScrapyBasicDemoDownloaderMiddleware': 543,
+#    'basic.middlewares.ScrapyBasicDemoDownloaderMiddleware': 543,
 #}
 
 # Enable or disable extensions
@@ -64,7 +64,7 @@ ROBOTSTXT_OBEY = False
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   'scrapy_basic_demo.pipelines.ScrapyBasicDemoPipeline': 300,
+   'basic.pipelines.ScrapyBasicDemoPipeline': 300,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
