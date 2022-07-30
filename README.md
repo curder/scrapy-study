@@ -10,6 +10,12 @@
 
 获取[读书网](https://www.dushu.com/book/1617.html) 中"国学入门"分类下的所有分页图片列表的书本详情信息。
 
+## [PM2.5空气质量日历史数据获取爬虫](./src/aqistudy.cn/README.md)
+
+[该站点](https://www.aqistudy.cn/historydata/)目前数据的目标页有一些反扒措施，比如数据使用JS动态加载，JS代码加密，禁用右键，禁用调试器查看源代码，Selenium 不能使用无头浏览器参数。
+
+通过 `selenium` 在 Scrapy 的下载中间件发送请求并返回响应的响应清晰响应中的干扰数据，再将修改后的响应交给引擎。
+
 
 ## 相关网站
 
