@@ -1,5 +1,9 @@
 # Scrapy Redis 分布式爬虫
 
+- [Github](https://github.com/rmax/scrapy-redis)
+
+- [Usage](https://github.com/rmax/scrapy-redis/wiki/Usage)
+
 项目创建流程：
 
 ```bash
@@ -22,6 +26,7 @@ redis-cli -n 15 lpush spider:start_urls https://www.baidu.com # 向Redis中添�
 scrapy crawl crawler_redis # 启动监听爬虫
 redis-cli -n 15 lpush crawler:start_urls https://www.baidu.com # 向Redis中添加起始URL
 ```
+
 
 ## 项目安装
 
