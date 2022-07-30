@@ -3,7 +3,7 @@ import {defineConfig} from 'vitepress'
 export default defineConfig({
     lang: "zh-CN",
     title: "Scrapy",
-    base: "/scrapy-demo/",
+    base: "/scrapy-study/",
     description: "Scrapy 学习",
     lastUpdated: true,
     themeConfig: {
