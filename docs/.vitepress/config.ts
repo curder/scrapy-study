@@ -48,5 +48,13 @@ function sidebarGuide() {
                 {text: "中间件", link: "/guide/middlewares"},
             ]
         },
+        {
+            text: "其他组件",
+            collapsible: true,
+            collapsed: false,
+            items: [
+                {text: "Scrapy Redis分布式爬虫", link: "/guide/components/scrapy-redis"},
+            ]
+        }
     ];
 }
