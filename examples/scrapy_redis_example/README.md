@@ -21,5 +21,30 @@ redis-cli -n 15 lpush spider:start_urls https://www.baidu.com # 向Redis中添�
 
 scrapy crawl crawler_redis # 启动监听爬虫
 redis-cli -n 15 lpush crawler:start_urls https://www.baidu.com # 向Redis中添加起始URL
+```
 
+## 项目安装
+
+使用下面的命令进入到项目目录
+
+```bash
+cd scrapy_redis_example
+```
+
+创建一个虚拟环境
+```bash
+python3 -m venv ./venv # 创建虚拟环境
+```
+
+激活虚拟环境
+
+```bash
+chmod +x ./venv/bin/activate
+source ./venv/bin/activate 
+```
+
+升级依赖
+
+```bash
+pip3 install -r requirements.txt
 ```
