@@ -21,10 +21,10 @@ class AqiDownloadMiddleware(object):
         if "daydata.php" in request.url:  # 仅过滤日历史数据请求URL
 
             driver = self.get_selenium_driver()  # 创建浏览器
-            print(request.url)
+            # print(request.url)
             driver.get(request.url)
-            # 延迟 1 秒钟执行
-            time.sleep(1)
+
+            time.sleep(1)  # 延迟 1 秒钟执行
 
             body = driver.page_source
 
@@ -49,12 +49,14 @@ class AqiDownloadMiddleware(object):
         class_name_lists = re.compile(r'\.([a-z0-9A-Z]+?) \{.*?display: none;.*?\}', re.S).findall(body)
         # 删除不应该展示的 th 和 td dom节点
         for class_name in class_name_lists:
-            print(class_name)
+            # print(class_name)
             for element in dom.xpath('//td[contains(@class, "%s")]' % class_name):
                 element.getparent().remove(element)
             for element in dom.xpath('//th[contains(@class, "%s")]' % class_name):
                 element.getparent().remove(element)
             for element in dom.xpath('//th[contains(@style, "display:none")]'):
+                element.getparent().remove(element)
+            for element in dom.xpath('//td[contains(@style, "display:none")]'):
                 element.getparent().remove(element)
             for element in dom.xpath('//th[contains(@class, "hidden-lg")]'):
                 element.getparent().remove(element)
@@ -66,21 +68,6 @@ class AqiDownloadMiddleware(object):
                 element.getparent().remove(element)
 
         return etree.tostring(dom)
-
-    # def process_response(self, request, response, spider):
-    #
-    #     if "daydata.php" in request.url:  # 仅过滤日历史数据请求URL
-    #         # body_str = str(response.body, response._body_declared_encoding())
-    #         # 删除不应该展示数据的table的dom节点
-    #         for table_selector in response.xpath("//table[contains(@style, 'position: absolute')]"):
-    #             self.remove_selector(table_selector)
-    #
-    #
-    #
-    #         with open('daydata_2.html', mode="w", encoding=response._body_declared_encoding()) as f:
-    #             f.write(str(response.text))
-    #
-    #     return response
 
     def get_selenium_driver(self):
         options = ChromeOptions()
