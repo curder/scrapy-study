@@ -12,7 +12,7 @@ class AqiSpider(scrapy.Spider):
     def parse(self, response):
         city_node_list = response.xpath('//div[@class="all"]/div[@class="bottom"]/ul//li/a')  # 获取城市月份节点
 
-        for city_node in city_node_list[:1]:  # 获取一个城市
+        for city_node in city_node_list[16:17]:  # 获取一个城市
             url = response.urljoin(city_node.xpath('./@href').get())
             city_name = city_node.xpath('./text()').get()
             # print(url, city_name)
@@ -57,6 +57,7 @@ class AqiSpider(scrapy.Spider):
             # tr = table_tr.get()
 
             yield AqiItem(
+                city_name=response.meta['city_name'],
                 day=table_tr.xpath('./td[%d]/text()' % need_field_dict['day']).get(),
                 aqi=table_tr.xpath('./td[%d]/text()' % need_field_dict['aqi']).get(),
                 quality_level=table_tr.xpath('./td[%d]//text()' % need_field_dict['quality_level']).get(),

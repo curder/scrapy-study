@@ -7,7 +7,7 @@ import scrapy
 
 
 class AqiItem(scrapy.Item):
-    # define the fields for your item here like:
+    city_name = scrapy.Field()  # 城市名
     day = scrapy.Field()  # 日期
     aqi = scrapy.Field()  # AQI
     quality_level = scrapy.Field()  # 质量等级
