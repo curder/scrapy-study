@@ -98,5 +98,11 @@ USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) " \
 ROBOTSTXT_OBEY = False
 
 DOWNLOADER_MIDDLEWARES = {
-   'aqistudy.middlewares.AqiDownloadMiddleware': 543,
+    'aqistudy.middlewares.AqiDownloadMiddleware': 543,
+}
+
+# Configure item pipelines
+# See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
+ITEM_PIPELINES = {
+    'aqistudy.pipelines.AqiPipeline': 600,
 }
