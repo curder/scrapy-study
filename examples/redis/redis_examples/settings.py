@@ -1,4 +1,4 @@
-# Scrapy settings for scrapy_redis_example project
+# Scrapy settings for redis_examples project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -8,13 +8,13 @@
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 import logging
 
-BOT_NAME = 'scrapy_redis_example'
+BOT_NAME = 'redis_examples'
 
-SPIDER_MODULES = ['scrapy_redis_example.spiders']
-NEWSPIDER_MODULE = 'scrapy_redis_example.spiders'
+SPIDER_MODULES = ['redis_examples.spiders']
+NEWSPIDER_MODULE = 'redis_examples.spiders'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-# USER_AGENT = 'scrapy_redis_example (+http://www.yourdomain.com)'
+# USER_AGENT = 'redis_examples (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
@@ -45,13 +45,13 @@ ROBOTSTXT_OBEY = False
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 # SPIDER_MIDDLEWARES = {
-#    'scrapy_redis_example.middlewares.ScrapyRedisExampleSpiderMiddleware': 543,
+#    'redis_examples.middlewares.ScrapyRedisExampleSpiderMiddleware': 543,
 # }
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 # DOWNLOADER_MIDDLEWARES = {
-#    'scrapy_redis_example.middlewares.ScrapyRedisExampleDownloaderMiddleware': 543,
+#    'redis_examples.middlewares.ScrapyRedisExampleDownloaderMiddleware': 543,
 # }
 
 # Enable or disable extensions
@@ -63,7 +63,7 @@ ROBOTSTXT_OBEY = False
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 # ITEM_PIPELINES = {
-#    'scrapy_redis_example.pipelines.ScrapyRedisExamplePipeline': 300,
+#    'redis_examples.pipelines.ScrapyRedisExamplePipeline': 300,
 # }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -100,7 +100,7 @@ SCHEDULER = "scrapy_redis.scheduler.Scheduler"
 # 设置当爬虫结束时是否保存 Redis 数据库中是否去重集合与任务队列
 SCHEDULER_PERSIST = True
 ITEM_PIPELINES = {
-    'scrapy_redis_example.pipelines.ScrapyRedisExamplePipeline': 300,
+    'redis_examples.pipelines.ScrapyRedisExamplePipeline': 300,
     # 当开启该管道，该管道会将数据存储到 Redis 数据库中
     'scrapy_redis.pipelines.RedisPipeline': 400,
 }

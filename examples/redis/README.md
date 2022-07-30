@@ -8,7 +8,7 @@
 
 ```bash
 pip3 install Scrapy scrapy-redis # 安装 Scrapy 和 Scrapy-redis
-scrapy startproject scrapy_redis_example scrapy_redis_example # 创建项目
+scrapy startproject redis_examples redis # 创建项目
 
 scrapy genspider -t crawl dmoz dmoz-odp.org  # 创建蜘蛛文件
 scrapy genspider spider_redis spider_redis  # 创建Redis爬虫
@@ -33,7 +33,7 @@ redis-cli -n 15 lpush crawler:start_urls https://www.baidu.com # 向Redis中添�
 使用下面的命令进入到项目目录
 
 ```bash
-cd scrapy_redis_example
+cd redis_examples
 ```
 
 创建一个虚拟环境
