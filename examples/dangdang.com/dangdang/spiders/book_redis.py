@@ -13,7 +13,7 @@ class BookRedisSpider(RedisSpider):
     def __init__(self, *args, **kwargs):
         # Dynamically define the allowed domains list.
         domain = kwargs.pop('domain', '')
-        self.allowed_domains = filter(None, domain.split(','))
+        self.allowed_domains = list(filter(None, domain.split(',')))  # 注意这里将数据转成列表
         super(BookRedisSpider, self).__init__(*args, **kwargs)
 
     def parse(self, response):
@@ -21,6 +21,7 @@ class BookRedisSpider(RedisSpider):
         top_node_list = response.xpath('//div[@class="classify_left"]/div[1]/div[@class="classify_kind"]')
 
         for top_node in top_node_list:
+            # 顶级分类名和URL
             top_category_name = top_node.xpath('./div[@class="classify_kind_name"]/a/text()').get()
             top_category_url = response.urljoin(top_node.xpath('./div[@class="classify_kind_name"]/a/@href').get())
 
@@ -31,6 +32,7 @@ class BookRedisSpider(RedisSpider):
                                                 '/a[not (@href="javascript:void(0);")]')
 
             for sub_node in sub_node_list:
+                # 子分类名和URL
                 sub_category_name = sub_node.xpath('./text()').get()
                 sub_category_url = response.urljoin(sub_node.xpath('./@href').get())
 
@@ -49,22 +51,24 @@ class BookRedisSpider(RedisSpider):
                 )
 
     def parse_book_list(self, response):
-        print('PARSE_BOOK_LIST: ', response.url)
-        # # 图书列表页面所有图书列表
-        # book_node_list = response.xpath('//div[@id="search_nature_rg"]/ul[@class="bigimg"]/li')
-        # for book in book_node_list:
-        #     item = DangdangItem()
-        #
-        #     item['top_category_name'] = response.meta['top_category_name']
-        #     item['top_category_url'] = response.meta['top_category_url']
-        #     item['sub_category_name'] = response.meta['sub_category_name']
-        #     item['sub_category_url'] = response.meta['sub_category_url']
-        #
-        #     item['url'] = response.urljoin(book.xpath('./p[@class="name"]/a/@href').get())
-        #     item['name'] = book.xpath('./p[@class="name"]/a/text()').get().strip()
-        #     item['author_name'] = ','.join(
-        #         book.xpath('./p[@class="search_book_author"]/span/a[@name="itemlist-author"]/text()').getall()
-        #     )
-        #     item['price'] = book.xpath('./p[@class="price"]/span/text()').get()
-        #
-        #     yield item
+        # print('PARSE_BOOK_LIST: ', response.url)
+        # 图书列表页面所有图书列表
+        book_node_list = response.xpath('//div[@id="search_nature_rg"]/ul[@class="bigimg"]/li')
+        for book in book_node_list:
+            item = DangdangItem()
+
+            # 分类信息
+            item['top_category_name'] = response.meta['top_category_name']
+            item['top_category_url'] = response.meta['top_category_url']
+            item['sub_category_name'] = response.meta['sub_category_name']
+            item['sub_category_url'] = response.meta['sub_category_url']
+
+            # 书本信息
+            item['url'] = response.urljoin(book.xpath('./p[@class="name"]/a/@href').get())
+            item['name'] = book.xpath('./p[@class="name"]/a/text()').get().strip()
+            item['author_name'] = ','.join(
+                book.xpath('./p[@class="search_book_author"]/span/a[@name="itemlist-author"]/text()').getall()
+            )
+            item['price'] = book.xpath('./p[@class="price"]/span/text()').get()
+
+            yield item
