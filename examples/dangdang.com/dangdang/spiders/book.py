@@ -11,16 +11,17 @@ class BookSpider(scrapy.Spider):
         # 获取所有图书顶级分类节点列表
         top_node_list = response.xpath('//div[@class="classify_left"]/div[1]/div[@class="classify_kind"]')
 
-        for top_node in top_node_list[:10]:
+        for top_node in top_node_list:
             top_category_name = top_node.xpath('./div[@class="classify_kind_name"]/a/text()').get()
             top_category_url = response.urljoin(top_node.xpath('./div[@class="classify_kind_name"]/a/@href').get())
 
             # print(top_category_name, top_category_url)
 
-            # 获取所有图书子级分类节点列表
-            sub_node_list = top_node_list.xpath('./ul[@class="classify_kind_detail"]/li/a')
+            # 获取所有图书子级分类节点列表(排除更多链接干扰)
+            sub_node_list = top_node_list.xpath('./ul[@class="classify_kind_detail"]/li'
+                                                '/a[not (@href="javascript:void(0);")]')
 
-            for sub_node in sub_node_list[:10]:
+            for sub_node in sub_node_list:
                 sub_category_name = sub_node.xpath('./text()').get()
                 sub_category_url = response.urljoin(sub_node.xpath('./@href').get())
 
@@ -50,4 +51,7 @@ class BookSpider(scrapy.Spider):
                 book.xpath('./p[@class="search_book_author"]/span/a[@name="itemlist-author"]/text()').getall()
             )
             item['price'] = book.xpath('./p[@class="price"]/span/text()').get()
+
+            print(item)
+
             yield item

@@ -9,6 +9,7 @@ class SpiderRedisSpider(RedisSpider):
     def __init__(self, *args, **kwargs):
         # Dynamically define the allowed domains list.
         domain = kwargs.pop('domain', '')
+
         self.allowed_domains = filter(None, domain.split(','))
         super(SpiderRedisSpider, self).__init__(*args, **kwargs)
 
