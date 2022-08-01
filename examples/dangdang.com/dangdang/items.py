@@ -7,6 +7,13 @@ import scrapy
 
 
 class DangdangItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+    top_category_name = scrapy.Field()
+    top_category_url = scrapy.Field()
+    sub_category_name = scrapy.Field()
+    sub_category_url = scrapy.Field()
+
+    name = scrapy.Field()
+    author_name = scrapy.Field()
+    price = scrapy.Field()
+
+
