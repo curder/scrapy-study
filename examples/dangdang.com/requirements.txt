@@ -1,2 +1,2 @@
 Scrapy==2.6.2
-scrapy-redis=0.7.3
+scrapy-redis==0.7.3
