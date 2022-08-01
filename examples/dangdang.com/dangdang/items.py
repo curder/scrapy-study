@@ -12,6 +12,7 @@ class DangdangItem(scrapy.Item):
     sub_category_name = scrapy.Field()
     sub_category_url = scrapy.Field()
 
+    url = scrapy.Field()
     name = scrapy.Field()
     author_name = scrapy.Field()
     price = scrapy.Field()
