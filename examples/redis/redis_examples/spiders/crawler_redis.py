@@ -15,8 +15,7 @@ class CrawlerRedisSpider(RedisCrawlSpider):
     def __init__(self, *args, **kwargs):
         # Dynamically define the allowed domains list.
         domain = kwargs.pop('domain', '')
-        self.allowed_domains = filter(None, domain.split(','))
-        print(self.allowed_domains)
+        self.allowed_domains = list(filter(None, domain.split(',')))
         super(CrawlerRedisSpider, self).__init__(*args, **kwargs)
 
     def parse_item(self, response):

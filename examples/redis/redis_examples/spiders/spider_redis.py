@@ -10,7 +10,7 @@ class SpiderRedisSpider(RedisSpider):
         # Dynamically define the allowed domains list.
         domain = kwargs.pop('domain', '')
 
-        self.allowed_domains = filter(None, domain.split(','))
+        self.allowed_domains = list(filter(None, domain.split(',')))
         super(SpiderRedisSpider, self).__init__(*args, **kwargs)
 
     def parse(self, response):
