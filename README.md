@@ -1,4 +1,4 @@
-# Scrapy爬虫框架
+# Scrapy 学习
 
 [![GitHub Pages](https://github.com/curder/scrapy-study/actions/workflows/build-docs.yml/badge.svg?branch=master)](https://curder.github.io/scrapy-study)
 
