@@ -17,6 +17,11 @@
 通过 `selenium` 在 Scrapy 的下载中间件发送请求并返回响应的响应清晰响应中的干扰数据，再将修改后的响应交给引擎。
 
 
+## [scrapy-redis 分布式爬虫](examples/redis/README.md)
+
+简单学习并初探 scrapy-redis 爬虫，感受从普通爬虫改造成 scrapy-redis 分布式爬虫的步骤和方法。
+
+
 ## 相关网站
 
 - [Scrapy Docs](https://docs.scrapy.org/en/latest/)
