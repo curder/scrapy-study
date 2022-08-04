@@ -114,3 +114,10 @@ pip3 install -r requirements.txt
 
    # 更多Redis相关设置查看这里：https://github.com/rmax/scrapy-redis/wiki/Usage
    ```
+
+7. 启动方式
+
+```bash
+scrapy crawl book
+redis-cli -n 15 LPUSH book:start_urls '{"url": "https://category.dangdang.com/"}' # 向Redis中添加指定key
+```

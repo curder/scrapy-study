@@ -21,6 +21,10 @@
 
 简单学习并初探 scrapy-redis 爬虫，感受从普通爬虫改造成 scrapy-redis 分布式爬虫的步骤和方法。
 
+## [当当网](examples/dangdang.com/README.md)
+
+使用 [scrapy-redis](https://github.com/rmax/scrapy-redis) 分布式爬取当当网书籍并存储到Redis中。
+
 
 ## 相关网站
 
