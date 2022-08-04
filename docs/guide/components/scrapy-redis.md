@@ -19,7 +19,7 @@
         # allowed_domains = ['dangdang.com']
         # start_urls = ['https://category.dangdang.com/']
 
-        # 4. 爬虫类中设置 `redis_key` 值 
+        # 4. 爬虫类中设置 `redis_key` 值，当 redis 中没有这个键的时候，程序会处于监听等待状态
         redis_key = 'book:start_urls'
 
         # 5. 设置爬虫类中 `__ini__` 方法
@@ -70,3 +70,8 @@
 
    # 更多Redis相关设置查看这里：https://github.com/rmax/scrapy-redis/wiki/Usage
    ```
+7. 启动方式
+```bash
+scrapy crawl book
+redis-cli -n 15 LPUSH book:start_urls '{"url": "https://category.dangdang.com/"}' # 向Redis中添加指定key
+```
