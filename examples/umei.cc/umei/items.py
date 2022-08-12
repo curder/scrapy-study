@@ -9,5 +9,5 @@ import scrapy
 class UmeiItem(scrapy.Item):
     id = scrapy.Field()  # 详情ID
 
-    image_urls = scrapy.Field()  # 存储图片URL
+    image_url = scrapy.Field()  # 存储图片URL
     images = scrapy.Field()  #

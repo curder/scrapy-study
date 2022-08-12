@@ -34,7 +34,7 @@ class DownloadImagesSpider(scrapy.Spider):
         item = UmeiItem()
         item['id'] = response.request.meta['id']
 
-        item['image_urls'] = [image_url.replace('http://kr.shanghai-jiuxin.com/', 'https://kr.zutuanla.com/')]
+        item['image_url'] = image_url.replace('http://kr.shanghai-jiuxin.com/', 'https://kr.zutuanla.com/')
 
         yield item
 

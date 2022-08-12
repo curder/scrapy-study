@@ -92,10 +92,14 @@ ROBOTSTXT_OBEY = False
 USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) " \
              "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36"
 # 日志级别
-LOG_LEVEL = logging.ERROR
+LOG_LEVEL = logging.DEBUG
 
 # 添加中间件用于图片下载
-ITEM_PIPELINES = {'scrapy.pipelines.images.ImagesPipeline': 300}
+ITEM_PIPELINES = {
+    'umei.pipelines.UmeiPipeline': 300,
+    # 'scrapy.pipelines.images.ImagesPipeline': 300,
+}
+DEFAULT_IMAGES_URLS_FIELD = 'image_url'
 IMAGES_STORE = 'images'
 # IMAGES_THUMBS = {
 #     'small': (100, 100),
