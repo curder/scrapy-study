@@ -46,6 +46,7 @@ function sidebarGuide() {
                 {text: "管道 Pipelines", link: "/guide/pipelines"},
                 {text: "链接提取器", link: "/guide/link-extractors"},
                 {text: "中间件", link: "/guide/middlewares"},
+                {text: "图片下载", link: "/guide/downloading-and-processing-images"},
             ]
         },
         {

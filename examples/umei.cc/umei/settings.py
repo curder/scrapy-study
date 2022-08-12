@@ -93,3 +93,14 @@ USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) " \
              "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36"
 # 日志级别
 LOG_LEVEL = logging.ERROR
+
+# 添加中间件用于图片下载
+ITEM_PIPELINES = {'scrapy.pipelines.images.ImagesPipeline': 300}
+IMAGES_STORE = 'images'
+# IMAGES_THUMBS = {
+#     'small': (100, 100),
+#     'big': (340, 340),
+# }
+IMAGES_EXPIRES = 90  # 文件过期延迟 90 天
+
+DOWNLOAD_DELAY = 0.5

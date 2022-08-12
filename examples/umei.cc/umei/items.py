@@ -7,6 +7,7 @@ import scrapy
 
 
 class UmeiItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+    id = scrapy.Field()  # 详情ID
+
+    image_urls = scrapy.Field()  # 存储图片URL
+    images = scrapy.Field()  #

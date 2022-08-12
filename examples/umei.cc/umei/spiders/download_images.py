@@ -6,7 +6,7 @@ from ..items import UmeiItem
 
 class DownloadImagesSpider(scrapy.Spider):
     name = 'download_images'
-    allowed_domains = ['umei.cc', 'shanghai-jiuxin.com']
+    allowed_domains = ['umei.cc', 'shanghai-jiuxin.com', 'zutuanla.com']
     start_urls = ['https://www.umei.cc/meinvtupian/meinvxiezhen/']
 
     def parse(self, response):
@@ -30,9 +30,12 @@ class DownloadImagesSpider(scrapy.Spider):
             )
 
         # 2. 分析出页面中待下载的图片地址
-        response.xpath('//section[@class="img-content"]//img/@src').get()
+        image_url = response.xpath('//section[@class="img-content"]//img/@src').get()
         item = UmeiItem()
         item['id'] = response.request.meta['id']
+
+        item['image_urls'] = [image_url.replace('http://kr.shanghai-jiuxin.com/', 'https://kr.zutuanla.com/')]
+
         yield item
 
     def get_page_id(self, url):
