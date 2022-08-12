@@ -8,6 +8,6 @@ import scrapy
 
 class UmeiItem(scrapy.Item):
     id = scrapy.Field()  # 详情ID
-
+    path = scrapy.Field()  # 文件存储路径
     image_url = scrapy.Field()  # 存储图片URL
     images = scrapy.Field()  #

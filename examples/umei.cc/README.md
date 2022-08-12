@@ -2,7 +2,7 @@
 
 ## 项目准备
 
-> **注意：** 下载图片功能依赖 `Pillow` 组件，使用 `pip` 下载。
+> ⚠️⚠️⚠️**注意：** 下载图片功能依赖 `Pillow` 组件，使用 `pip` 下载。
 
 ```bash
 pip install Scrapy Pillow
@@ -36,7 +36,9 @@ class UmeiItem(scrapy.Item):
 import re
 
 import scrapy
+import hashlib
 from ..items import UmeiItem
+from scrapy.utils.python import to_bytes
 from scrapy_redis.spiders import RedisSpider
 
 
@@ -79,11 +81,12 @@ class DownloadImagesSpider(RedisSpider):
 
         item['image_url'] = image_url.replace('http://kr.shanghai-jiuxin.com/', 'https://kr.zutuanla.com/')
 
+        item['path'] = f'origin/{item["id"]}-{hashlib.sha1(to_bytes(image_url)).hexdigest()}.jpg'
+
         yield item
 
     def get_page_id(self, url):
         return re.compile(r'(?P<id>\d+)(_\d+)*.htm', re.S).search(url).group('id')
-
 ```
 
 ## 项目设置
@@ -131,25 +134,20 @@ REDIS_DB = 1
 
 ```python
 import scrapy
-import hashlib
-from scrapy.utils.python import to_bytes
 from scrapy.pipelines.images import ImagesPipeline
+
 
 class UmeiPipeline(ImagesPipeline):
     """自定义图片下载器, 添加资源ID作为文件夹保存图片"""
 
     def get_media_requests(self, item, info):
         """发生图片下载请求"""
-        yield scrapy.Request(item["image_url"], meta={"id": item['id']})  # 继续传递页面ID
+        yield scrapy.Request(item["image_url"], meta={"path": item['path']})  # 继续传递图片存储路径
 
     def file_path(self, request, response=None, info=None, *, item=None):
-        """自定义图片保存路径, 以页面ID作为文件夹保存"""
-        id = request.meta['id']
-        image_guid = hashlib.sha1(to_bytes(request.url)).hexdigest()
-
-        return f'origin/{id}/{image_guid}.jpg'
+        """自定义图片保存路径"""
+        return request.meta['path']
 ```
-
 
 # 启动爬虫
 

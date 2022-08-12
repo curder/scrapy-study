@@ -1,7 +1,9 @@
 import re
 
 import scrapy
+import hashlib
 from ..items import UmeiItem
+from scrapy.utils.python import to_bytes
 from scrapy_redis.spiders import RedisSpider
 
 
@@ -43,6 +45,8 @@ class DownloadImagesSpider(RedisSpider):
         item['id'] = response.request.meta['id']
 
         item['image_url'] = image_url.replace('http://kr.shanghai-jiuxin.com/', 'https://kr.zutuanla.com/')
+
+        item['path'] = f'origin/{item["id"]}-{hashlib.sha1(to_bytes(item["image_url"])).hexdigest()}.jpg'
 
         yield item
 
