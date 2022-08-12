@@ -94,9 +94,19 @@ USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) " \
 # 日志级别
 LOG_LEVEL = logging.DEBUG
 
+# 设置重复过滤模块
+DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
+# 设置调度器，scrapy_redis中的调度器具备和数据库交互的功能
+SCHEDULER = "scrapy_redis.scheduler.Scheduler"
+# 设置当爬虫结束时是否保存 Redis 数据库中是否去重集合与任务队列
+SCHEDULER_PERSIST = True
+
 # 添加中间件用于图片下载
 ITEM_PIPELINES = {
     'umei.pipelines.UmeiPipeline': 300,
+
+    # 当开启该管道，该管道会将数据存储到 Redis 数据库中
+    'scrapy_redis.pipelines.RedisPipeline': 400,
     # 'scrapy.pipelines.images.ImagesPipeline': 300,
 }
 DEFAULT_IMAGES_URLS_FIELD = 'image_url'
@@ -108,3 +118,11 @@ IMAGES_STORE = 'images'
 IMAGES_EXPIRES = 90  # 文件过期延迟 90 天
 
 DOWNLOAD_DELAY = 0.5
+
+# 项目管道序列化并存储此redis密钥中的项目。
+REDIS_ITEMS_KEY = 'www.umei.cc:meinvtupian:meinvxiezhen:items'
+
+# 指定连接到Redis时要使用的主机和端口（可选）。
+REDIS_HOST = 'localhost'
+REDIS_PORT = 6379
+REDIS_DB = 1

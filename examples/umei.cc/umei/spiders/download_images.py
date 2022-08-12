@@ -2,12 +2,20 @@ import re
 
 import scrapy
 from ..items import UmeiItem
+from scrapy_redis.spiders import RedisSpider
 
 
-class DownloadImagesSpider(scrapy.Spider):
+class DownloadImagesSpider(RedisSpider):
     name = 'download_images'
-    allowed_domains = ['umei.cc', 'shanghai-jiuxin.com', 'zutuanla.com']
-    start_urls = ['https://www.umei.cc/meinvtupian/meinvxiezhen/']
+    # allowed_domains = ['umei.cc', 'shanghai-jiuxin.com', 'zutuanla.com']
+    # start_urls = ['https://www.umei.cc/meinvtupian/meinvxiezhen/']
+    redis_key = 'download_images:start_urls'
+
+    def __init__(self, *args, **kwargs):
+        # Dynamically define the allowed domains list.
+        domain = kwargs.pop('domain', '')
+        self.allowed_domains = list(filter(None, domain.split(',')))
+        super(DownloadImagesSpider, self).__init__(*args, **kwargs)
 
     def parse(self, response):
         # 1. 分析目标页面图片列表，找到图片详情页
