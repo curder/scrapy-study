@@ -25,6 +25,9 @@
 
 使用 [scrapy-redis](https://github.com/rmax/scrapy-redis) 分布式爬取当当网书籍并存储到Redis中。
 
+## [优美图库](examples/umei.cc/README.md)
+
+使用自带`scrapy.pipelines.images.ImagesPipeline`中间件进行图片下载。
 
 ## 相关网站
 
