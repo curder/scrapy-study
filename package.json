@@ -1,16 +1,16 @@
 {
   "name": "scrapy-demo",
-   "description": "Study Scrapy Framework",
+  "description": "Study Scrapy Framework",
   "repository": "git@github.com:curder/scrapy-demo.git",
   "author": "curder <q.curder@gmail.com>",
   "license": "MIT",
-   "scripts": {
+  "type": "module",
+  "scripts": {
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:serve": "vitepress serve docs"
   },
   "devDependencies": {
-    "vitepress": "^1.0.0-alpha.4",
-    "vue": "^3.2.37"
+    "vitepress": "^1.0.0-alpha.4"
   }
 }
