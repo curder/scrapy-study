@@ -1,6 +1,6 @@
 # Scrapy 学习
 
-[![GitHub Pages](https://github.com/curder/scrapy-study/actions/workflows/build-docs.yml/badge.svg?branch=master)](https://curder.github.io/scrapy-study)
+[![Deploy VitePress site to Pages](https://github.com/curder/scrapy-study/actions/workflows/deploy.yml/badge.svg)](https://github.com/curder/scrapy-study/actions/workflows/deploy.yml)
 
 ## [基础学习](examples/basic/README.md)
 
